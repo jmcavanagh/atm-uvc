@@ -12,7 +12,7 @@ def is_int(s: str) -> bool:
         return False
 
 
-def get_cas_numbers() -> list[int]:
+def get_cas_numbers() -> list[str]:
     """get all CAS numbers from high production volume chemical list highproductionvolume.pdf"""
     pdf_file_obj = open("highproductionvolume.pdf", "rb")
     pdf_reader = PyPDF2.PdfReader(pdf_file_obj)
@@ -25,7 +25,9 @@ def get_cas_numbers() -> list[int]:
         for line in lines:
             values = line.split(" ")
             if len(values) >= 2 and is_int(values[0]) and is_int(values[1]):
-                cas_numbers.append(int(values[1]))
+                s = values[1]
+                formatted_s = s[:-3] + "-" + s[-3:-1] + "-" + s[-1]
+                cas_numbers.append(formatted_s)
 
     pdf_file_obj.close()
 
@@ -34,5 +36,5 @@ def get_cas_numbers() -> list[int]:
 
 if __name__ == "__main__":
     cas_nums = get_cas_numbers()
-    for cas_num in cas_nums[:10]:
-        print(cas_num)
+    for cas_num in cas_nums[:100]:
+        fetch.save_sdf_to_file(fetch.sdf_from_cas(cas_num), cas_num + ".sdf")

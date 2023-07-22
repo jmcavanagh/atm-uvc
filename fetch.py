@@ -1,6 +1,7 @@
 # provide methods to get 3D Conformer SDF files from PubChem
 # https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest-tutorial
 import requests
+from lxml import etree
 
 
 def sdf_from_sid(sid) -> str:
@@ -31,7 +32,18 @@ def sdf_from_smiles(smiles: str) -> str:
     return response.text
 
 
+def sdf_from_cas(cas: str) -> str:
+    """Get 3D Conformer SDF file from PubChem by CAS"""
+    url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/" + cas + "/record/SDF/?record_type=3d"
+    response = requests.get(url)
+    if response.text.startswith("Status: 404"):
+        print("404: " + cas)
+    return response.text
+
+
 def save_sdf_to_file(sdf: str, filename: str) -> None:
+    if sdf.startswith("Status: 404"):
+            return
     with open("molecule_sdf/" + filename, "w") as f:
         f.write(sdf)
 
@@ -39,4 +51,6 @@ def save_sdf_to_file(sdf: str, filename: str) -> None:
 if __name__ == "__main__":
     save_sdf_to_file(sdf_from_cid(2244), "2244.sdf")
     save_sdf_to_file(sdf_from_name("glucose"), "glucose.sdf")
+    save_sdf_to_file(sdf_from_cas("220863-07-0"), "220863-07-0.sdf")
+    save_sdf_to_file(sdf_from_cas("64-19-7"), "64-19-7.sdf")
 
