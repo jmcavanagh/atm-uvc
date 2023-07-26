@@ -41,16 +41,16 @@ def sdf_from_cas(cas: str) -> str:
     return response.text
 
 
-def save_sdf_to_file(sdf: str, filename: str) -> None:
+def save_sdf_to_file(sdf: str, location: str) -> None:
     if sdf.startswith("Status: 404"):
-            return
-    with open("molecule_sdf/" + filename, "w") as f:
+        return
+    with open(location, "w") as f:
         f.write(sdf)
 
 
 if __name__ == "__main__":
-    save_sdf_to_file(sdf_from_cid(2244), "2244.sdf")
-    save_sdf_to_file(sdf_from_name("glucose"), "glucose.sdf")
-    save_sdf_to_file(sdf_from_cas("220863-07-0"), "220863-07-0.sdf")
-    save_sdf_to_file(sdf_from_cas("64-19-7"), "64-19-7.sdf")
+    save_sdf_to_file(sdf_from_cid(2244), "test_sdf/2244.sdf")
+    save_sdf_to_file(sdf_from_name("glucose"), "test_sdf/glucose.sdf")
+    save_sdf_to_file(sdf_from_cas("220863-07-0"), "test_sdf/220863-07-0.sdf")
+    save_sdf_to_file(sdf_from_cas("64-19-7"), "test_sdf/64-19-7.sdf")
 

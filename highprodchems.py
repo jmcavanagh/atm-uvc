@@ -36,5 +36,5 @@ def get_cas_numbers() -> list[str]:
 
 if __name__ == "__main__":
     cas_nums = get_cas_numbers()
-    for cas_num in cas_nums[:100]:
-        fetch.save_sdf_to_file(fetch.sdf_from_cas(cas_num), cas_num + ".sdf")
+    for cas_num in cas_nums:
+        fetch.save_sdf_to_file(fetch.sdf_from_cas(cas_num), "highprod_sdf/" + cas_num + ".sdf")
