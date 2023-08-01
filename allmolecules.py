@@ -6,7 +6,7 @@ import pandas as pd
 from typing import List
 
 
-def get_gases() -> List[str]:
+def get_gases_wiki() -> List[str]:
     """get table from Wikipedia https://en.wikipedia.org/wiki/List_of_gases"""
     wiki_url = "https://en.wikipedia.org/wiki/List_of_gases"
     table_class = "wikitable sortable"
@@ -21,6 +21,13 @@ def get_gases() -> List[str]:
     return cas_nums
 
 
+def get_gases_chemspi() -> List[str]:
+    requests.get("https://api.rsc.org/compounds/v1/filter/properties.json?query=meltingPoint%20%3E%200%20AND%20boilingPoint%20%3C%20100%20AND%20phase%20%3D%20%22gas%22&start=0&count=1000&sort=meltingPoint&order=asc&fields=casRegistryNumber")
+    return []
+
+
 if __name__ == "__main__":
-    for cas_num in get_gases():
+    # gas_list = get_gases_wiki()
+    gas_list = get_gases_chemspi()
+    for cas_num in gas_list:
         fetch.save_sdf_to_file(fetch.sdf_from_cas(cas_num), "gases_sdf/" + cas_num + ".sdf")

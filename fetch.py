@@ -48,9 +48,30 @@ def save_sdf_to_file(sdf: str, location: str) -> None:
         f.write(sdf)
 
 
+def name_from_cas(cas: str) -> str:
+    """Get name from PubChem by CAS"""
+    url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/" + cas + "/property/IUPACName/XML"
+    response = requests.get(url)
+    print(url)
+
+    if response.status_code != 200:
+        print(f"HTTP error {response.status_code}: {cas}")
+        return ""
+
+    # get everything between <IUAPCName> and </IUPACName> with strings
+    string = response.content.decode("utf-8")
+    start = string.find("<IUPACName>") + len("<IUPACName>")
+    end = string.find("</IUPACName>")
+    if start != -1 and end != -1:
+        return string[start:end]
+
+    return ""
+
+
 if __name__ == "__main__":
     save_sdf_to_file(sdf_from_cid(2244), "test_sdf/2244.sdf")
     save_sdf_to_file(sdf_from_name("glucose"), "test_sdf/glucose.sdf")
     save_sdf_to_file(sdf_from_cas("220863-07-0"), "test_sdf/220863-07-0.sdf")
     save_sdf_to_file(sdf_from_cas("64-19-7"), "test_sdf/64-19-7.sdf")
+    print(name_from_cas("64-19-7"))
 
