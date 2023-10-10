@@ -68,8 +68,10 @@ Returns True if the associated molecule has imaginary frequencies and False
 otherwise
 '''
 def has_im_freqs(mol, functional):
-    mf=pyscf.dft.UKS(mol)
-    mf.xc=functional
+    if mol.spin == 0:
+        mf=pyscf.scf.RHF(mol)
+    else:
+        mf=pyscf.scf.UHF(mol)
     mf.kernel()
     hess = mf.Hessian().kernel()
     freqs = thermo.harmonic_analysis(mf.mol, hess, imaginary_freq=True)
@@ -77,6 +79,7 @@ def has_im_freqs(mol, functional):
     for f in freqs_array:
         fconj = np.conjugate(f)
         if f != fconj:
+            print(f)
             return True
     return False
 
