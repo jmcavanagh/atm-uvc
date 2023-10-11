@@ -13,7 +13,7 @@ All ADE's and VDE's calculated by this program use density functional theory.
 Absorption of a photon can change the energy of a molecule by exciting an electron to a different orbital. The energies possible for this can be relatively well-approximated using time-dependent density functional theory (TDDFT)
 
 ##On imaginary frequencies and saddle points
-The energy of some molecule depends on the positions of all of its atomic nuclei. Therefore, the energy can be thought of as a function over all of the positions of all of the nuclei. Local minima of energy represent stable molecular structures, so we can often generate a more accurate structure from some template using local minimization methods. However, some molecular structures can be at saddle points, and these methods will fail. We can check if a molecule is at a saddle point by seeing if its hessian has negative eigenvalues, which correspond to imaginary vibrational frequencies. The files `check_for_im_freqs.py` and `check_for_im_freqs_anions.py` serve the purpose of searching for saddle points.
+The energy of some molecule depends on the positions of all of its atomic nuclei. Therefore, the energy can be thought of as a function over all of the positions of all of the nuclei. Local minima of energy represent stable molecular structures, so we can often generate a more accurate structure from some template using local minimization methods. However, some molecular structures can be at saddle points, and these methods will fail. We can check if a molecule is at a saddle point by seeing if its hessian has negative eigenvalues, which correspond to imaginary vibrational frequencies. The files `check_for_im_freqs.py` and `check_for_im_freqs_cations.py` serve the purpose of searching for saddle points.
 
 
 #How to use
@@ -45,5 +45,7 @@ Then, run `python3 ade_from_opt.py <folder>` to optimize all of the structures i
 
 Generally, you should optimize both the neutral and cation structures with the same exchange-correlation functional. What this means is that you should only calculate the ADE using "b3lyp" if the starting structure was optimized with "b3lyp".
 
-## To check
+## To check for saddle points
+Run `python3 check_for_im_freqs.py <folder of xyz files>` to check for saddle points for neutral, closed shell molecules, and  `python3 check_for_im_freqs_cations.py <folder of xyz files>` to do the same for cation molecules with an odd number of electrons.
+
 
