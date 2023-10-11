@@ -47,7 +47,8 @@ if __name__ == "__main__":
     for fn_name in fn_names:
         start_time = time.time()
         pool = multiprocessing.Pool(processes=len(files))
-        plus_args = partial(process_molecule, path=folder, optname_modification='_opt'+fn_name, optpath='./optstrucs/', bfcs = ['ccpvtz', fn_name, 0, 0], logpath='./logs/')
+        optpath = './optstrucs/'
+        plus_args = partial(process_molecule, path=folder, optname_modification='_opt'+fn_name, optpath=optpath, bfcs = ['ccpvtz', fn_name, 0, 0], logpath='./logs/')
 
         results = pool.map(plus_args, files)
 
