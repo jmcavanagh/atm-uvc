@@ -68,10 +68,16 @@ Returns True if the associated molecule has imaginary frequencies and False
 otherwise
 '''
 def has_im_freqs(mol, functional):
-    if mol.spin == 0:
-        mf=pyscf.scf.RHF(mol)
+    if functional == 'hf':
+        if mol.spin == 0:
+            mf=pyscf.scf.RHF(mol)
+        else:
+            mf=pyscf.scf.UHF(mol)
     else:
-        mf=pyscf.scf.UHF(mol)
+        if mol.spin == 0:
+            mf=pyscf.dft.RKS(mol)
+        else:
+            mf=pyscf.dft.UKS(mol)
     mf.kernel()
     hess = mf.Hessian().kernel()
     freqs = thermo.harmonic_analysis(mf.mol, hess, imaginary_freq=True)
