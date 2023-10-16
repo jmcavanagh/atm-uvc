@@ -81,7 +81,7 @@ def has_im_freqs(mol, functional):
     mf.kernel()
     hess = mf.Hessian().kernel()
     freqs = thermo.harmonic_analysis(mf.mol, hess, imaginary_freq=True)
-    freqs_array = freqs['freq_au']
+    freqs_array = freqs['freq_wavenumber']
     for f in freqs_array:
         fconj = np.conjugate(f)
         if f != fconj:
