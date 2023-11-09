@@ -63,11 +63,7 @@ def check_multiplicity(path, name, basis_set, functional, verbose=False, initial
     else:
         return 3
 
-'''
-Returns True if the associated molecule has imaginary frequencies and False
-otherwise
-'''
-def has_im_freqs(mol, functional):
+def make_mf(mol, functional):
     if functional == 'hf':
         if mol.spin == 0:
             mf=pyscf.scf.RHF(mol)
@@ -78,15 +74,30 @@ def has_im_freqs(mol, functional):
             mf=pyscf.dft.RKS(mol)
         else:
             mf=pyscf.dft.UKS(mol)
-    mf.kernel()
+    return mf
+
+
+'''
+Returns True if the associated molecule has imaginary frequencies and False
+otherwise
+'''
+def has_im_freqs(mol, functional):
+    mf = make_mf(mol, functional)
+    energy_1 = mf.kernel()
     hess = mf.Hessian().kernel()
     freqs = thermo.harmonic_analysis(mf.mol, hess, imaginary_freq=True)
-    freqs_array = freqs['freq_wavenumber']
-    for f in freqs_array:
-        fconj = np.conjugate(f)
-        if f != fconj:
-            print(f)
-            return True
+    for (freq, eigenvector) in zip(freqs['freq_wavenumber'], freqs['norm_mode']):
+        freqconj = np.conjugate(freq)
+        if freq != freqconj:
+            eigenvector = eigenvector*0.02
+            for k in range(0, len(mol.atom)):
+                mol.atom[k][1] += eigenvector[k]*0.02
+            #Recalculate energy
+            mf2 = make_mf(mol, functional)
+            energy_2 = mf2.kernel()
+            if energy_2 < energy_1:
+                print(freq)
+                return True
     return False
 
 
