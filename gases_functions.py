@@ -91,7 +91,8 @@ def has_im_freqs(mol, functional):
         if freq != freqconj:
             eigenvector = eigenvector*0.02
             for k in range(0, len(mol.atom)):
-                mol.atom[k][1] += eigenvector[k]*0.02
+                for i in range(0, 3):
+                    mol.atom[k][1][i] += eigenvector[k][i]*0.02
             #Recalculate energy
             mf2 = make_mf(mol, functional)
             energy_2 = mf2.kernel()
