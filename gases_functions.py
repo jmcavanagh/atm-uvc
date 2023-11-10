@@ -89,6 +89,7 @@ def has_im_freqs(mol, functional):
     for (freq, eigenvector) in zip(freqs['freq_wavenumber'], freqs['norm_mode']):
         freqconj = np.conjugate(freq)
         if freq != freqconj:
+            '''
             eigenvector = eigenvector*0.02
             for k in range(0, len(mol.atom)):
                 for i in range(0, 3):
@@ -98,7 +99,8 @@ def has_im_freqs(mol, functional):
             energy_2 = mf2.kernel()
             if energy_2 < energy_1:
                 print(freq)
-                return True
+            '''
+            return True
     return False
 
 
