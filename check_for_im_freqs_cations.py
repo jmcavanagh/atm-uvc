@@ -2,9 +2,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sun Aug  6 17:53:52 2023
-
-@author: joe
+This generally gives unreliable results, here to be improved in future iterations.
 """
 
 import gases_functions
